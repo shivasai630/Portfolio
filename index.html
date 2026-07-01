@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shiva Sai — Data Analyst</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0A0F1C;
+    --panel: #111A2C;
+    --panel-2: #0D1524;
+    --line: #1E2A42;
+    --teal: #2DD8C4;
+    --amber: #F5A524;
+    --text: #E7ECF5;
+    --muted: #8996AD;
+    --muted-2: #5C6A85;
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height:1.5;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 48px 48px;
+    background-position: -1px -1px;
+    background-attachment: fixed;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+  }
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+  /* ===== Top bar ===== */
+  .topbar{
+    position:sticky; top:0; z-index:50;
+    background: rgba(10,15,28,0.85);
+    backdrop-filter: blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar-inner{
+    max-width:1080px;margin:0 auto;padding:14px 24px;
+    display:flex;align-items:center;justify-content:space-between;
+    font-family:var(--font-mono); font-size:12.5px;
+  }
+  .brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:600;font-size:16px;letter-spacing:0.2px;}
+  .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal);animation:pulse 2.4s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.35;}}
+  .nav-tabs{display:flex;gap:2px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:3px;}
+  .nav-tabs a{padding:6px 14px;border-radius:6px;color:var(--muted);font-size:12px;transition:all .2s;}
+  .nav-tabs a:hover{color:var(--text);background:var(--panel);}
+  .status{color:var(--muted-2);display:flex;align-items:center;gap:6px;}
+  @media (max-width:760px){ .nav-tabs{display:none;} }
+
+  /* ===== Hero ===== */
+  .hero{padding:72px 0 40px;}
+  .eyebrow{
+    font-family:var(--font-mono); font-size:12px; color:var(--teal);
+    display:flex; align-items:center; gap:8px; margin-bottom:18px;
+  }
+  .eyebrow::before{content:'';width:18px;height:1px;background:var(--teal);}
+  h1{
+    font-family:var(--font-display); font-weight:700;
+    font-size:clamp(34px,5.5vw,58px); line-height:1.06; letter-spacing:-0.5px;
+    margin-bottom:18px;
+  }
+  h1 .accent{color:var(--teal);}
+  .lede{color:var(--muted); font-size:16.5px; max-width:600px; margin-bottom:30px;}
+  .hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:56px;}
+  .btn{
+    font-family:var(--font-mono); font-size:13px; padding:11px 20px; border-radius:8px;
+    display:inline-flex; align-items:center; gap:8px; transition:all .2s; border:1px solid transparent;
+  }
+  .btn-primary{background:var(--teal); color:#06231F; font-weight:600;}
+  .btn-primary:hover{background:#5CE6D5; transform:translateY(-1px);}
+  .btn-ghost{border-color:var(--line); color:var(--text);}
+  .btn-ghost:hover{border-color:var(--teal); color:var(--teal);}
+
+  /* ===== KPI Dashboard (signature) ===== */
+  .dash{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 30px 60px -30px rgba(0,0,0,0.6);
+  }
+  .dash-head{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 20px;border-bottom:1px solid var(--line);
+    font-family:var(--font-mono); font-size:12px; color:var(--muted-2);
+  }
+  .dash-head .lights{display:flex;gap:6px;}
+  .dash-head .lights span{width:9px;height:9px;border-radius:50%;background:var(--line);}
+  .dash-grid{
+    display:grid; grid-template-columns:repeat(4,1fr);
+  }
+  .kpi{
+    padding:24px 20px; border-right:1px solid var(--line); border-bottom:1px solid var(--line);
+    position:relative;
+  }
+  .kpi:nth-child(4n){border-right:none;}
+  .kpi-label{font-family:var(--font-mono); font-size:11px; color:var(--muted-2); text-transform:uppercase; letter-spacing:0.6px; margin-bottom:10px;}
+  .kpi-value{font-family:var(--font-display); font-size:32px; font-weight:700; color:var(--text); display:flex; align-items:baseline; gap:2px;}
+  .kpi-value .unit{font-size:18px; color:var(--teal);}
+  .kpi-bar{margin-top:14px; height:4px; background:var(--panel-2); border-radius:2px; overflow:hidden;}
+  .kpi-bar-fill{height:100%; background:var(--teal); width:0%; border-radius:2px; transition:width 1.4s cubic-bezier(.16,1,.3,1);}
+  .kpi:nth-child(2) .kpi-bar-fill, .kpi:nth-child(3) .kpi-bar-fill{background:var(--amber);}
+  @media (max-width:760px){
+    .dash-grid{grid-template-columns:repeat(2,1fr);}
+    .kpi:nth-child(2n){border-right:none;}
+  }
+
+  /* ===== Section shell ===== */
+  section{padding:88px 0;border-top:1px solid var(--line);}
+  .sec-head{display:flex; align-items:baseline; gap:14px; margin-bottom:40px;}
+  .sec-num{font-family:var(--font-mono); font-size:12px; color:var(--teal);}
+  .sec-title{font-family:var(--font-display); font-size:28px; font-weight:600;}
+  .sec-sub{color:var(--muted); font-size:14.5px; margin-top:-24px; margin-bottom:36px; max-width:560px;}
+
+  /* ===== About ===== */
+  .about-grid{display:grid; grid-template-columns:1.3fr 1fr; gap:48px;}
+  .about-text{color:var(--muted); font-size:15.5px; line-height:1.75;}
+  .about-text strong{color:var(--text); font-weight:600;}
+  .facts{display:flex; flex-direction:column; gap:0; border:1px solid var(--line); border-radius:10px; overflow:hidden;}
+  .fact{display:flex; justify-content:space-between; padding:14px 18px; border-bottom:1px solid var(--line); font-size:13.5px;}
+  .fact:last-child{border-bottom:none;}
+  .fact-k{color:var(--muted-2); font-family:var(--font-mono); font-size:11.5px; text-transform:uppercase; letter-spacing:0.4px;}
+  .fact-v{color:var(--text); font-weight:500; text-align:right;}
+  @media (max-width:760px){ .about-grid{grid-template-columns:1fr;} }
+
+  /* ===== Skills — query table ===== */
+  .query-box{
+    font-family:var(--font-mono); font-size:12.5px; color:var(--muted);
+    background:var(--panel-2); border:1px solid var(--line); border-radius:10px 10px 0 0;
+    padding:14px 18px; border-bottom:none;
+  }
+  .query-box .kw{color:var(--teal);}
+  .query-box .str{color:var(--amber);}
+  table.skills-table{width:100%; border-collapse:collapse; border:1px solid var(--line); border-radius:0 0 10px 10px; overflow:hidden;}
+  .skills-table th{
+    text-align:left; font-family:var(--font-mono); font-size:11px; color:var(--muted-2);
+    text-transform:uppercase; letter-spacing:0.5px; padding:12px 18px; background:var(--panel);
+    border-bottom:1px solid var(--line);
+  }
+  .skills-table td{padding:16px 18px; border-bottom:1px solid var(--line); vertical-align:top; font-size:13.5px;}
+  .skills-table tr:last-child td{border-bottom:none;}
+  .skills-table tr:hover td{background:rgba(45,216,196,0.03);}
+  .cat-name{font-family:var(--font-display); font-weight:600; color:var(--text); font-size:14.5px;}
+  .tag-row{display:flex; flex-wrap:wrap; gap:7px;}
+  .tag{
+    font-family:var(--font-mono); font-size:11.5px; color:var(--muted); background:var(--panel-2);
+    border:1px solid var(--line); padding:4px 10px; border-radius:5px; white-space:nowrap;
+  }
+
+  /* ===== Experience — log timeline ===== */
+  .timeline{position:relative; padding-left:28px;}
+  .timeline::before{content:''; position:absolute; left:6px; top:6px; bottom:6px; width:1px; background:var(--line);}
+  .tl-item{position:relative; margin-bottom:44px;}
+  .tl-item:last-child{margin-bottom:0;}
+  .tl-item::before{
+    content:''; position:absolute; left:-28px; top:5px; width:11px; height:11px; border-radius:50%;
+    background:var(--bg); border:2px solid var(--teal);
+  }
+  .tl-item.current::before{background:var(--teal); box-shadow:0 0 0 4px rgba(45,216,196,0.15);}
+  .tl-date{font-family:var(--font-mono); font-size:11.5px; color:var(--teal); margin-bottom:6px; display:flex; align-items:center; gap:8px;}
+  .tl-tag{font-size:10px; background:rgba(45,216,196,0.12); color:var(--teal); padding:2px 8px; border-radius:20px; letter-spacing:0.3px;}
+  .tl-role{font-family:var(--font-display); font-size:19px; font-weight:600; margin-bottom:2px;}
+  .tl-org{color:var(--muted-2); font-size:13.5px; margin-bottom:14px; font-family:var(--font-mono);}
+  .tl-list{list-style:none; display:flex; flex-direction:column; gap:9px;}
+  .tl-list li{color:var(--muted); font-size:14px; padding-left:18px; position:relative;}
+  .tl-list li::before{content:'▸'; position:absolute; left:0; color:var(--teal); font-size:12px;}
+
+  /* ===== Achievements ===== */
+  .ach-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:16px;}
+  .ach-card{
+    border:1px solid var(--line); background:var(--panel); border-radius:10px; padding:22px;
+    transition:border-color .2s, transform .2s;
+  }
+  .ach-card:hover{border-color:var(--teal); transform:translateY(-2px);}
+  .ach-num{font-family:var(--font-display); font-size:30px; font-weight:700; color:var(--amber); margin-bottom:8px;}
+  .ach-desc{color:var(--muted); font-size:13.5px; line-height:1.55;}
+  @media (max-width:760px){ .ach-grid{grid-template-columns:1fr;} }
+
+  /* ===== Education ===== */
+  .edu-card{
+    border:1px solid var(--line); background:var(--panel); border-radius:10px; padding:26px 28px;
+    display:flex; justify-content:space-between; align-items:center; gap:20px; flex-wrap:wrap;
+  }
+  .edu-degree{font-family:var(--font-display); font-size:18px; font-weight:600; margin-bottom:4px;}
+  .edu-school{color:var(--muted); font-size:14px;}
+  .edu-year{font-family:var(--font-mono); font-size:12.5px; color:var(--teal); border:1px solid var(--line); padding:6px 14px; border-radius:20px;}
+
+  /* ===== Contact — connection panel ===== */
+  .connect{
+    background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:44px;
+    display:grid; grid-template-columns:1.1fr 1fr; gap:40px; align-items:center;
+  }
+  .connect-title{font-family:var(--font-display); font-size:26px; font-weight:600; margin-bottom:12px;}
+  .connect-sub{color:var(--muted); font-size:14.5px; margin-bottom:26px; max-width:420px;}
+  .conn-string{
+    font-family:var(--font-mono); font-size:12px; color:var(--muted-2); background:var(--panel-2);
+    border:1px solid var(--line); border-radius:8px; padding:14px 16px; margin-bottom:22px;
+    overflow-x:auto; white-space:pre;
+  }
+  .conn-string .k{color:var(--teal);}
+  .contact-rows{display:flex; flex-direction:column; gap:0;}
+  .crow{
+    display:flex; align-items:center; justify-content:space-between; padding:14px 18px;
+    border:1px solid var(--line); border-radius:8px; margin-bottom:10px; transition:all .2s;
+  }
+  .crow:hover{border-color:var(--teal); background:rgba(45,216,196,0.04);}
+  .crow-label{font-family:var(--font-mono); font-size:11px; color:var(--muted-2); text-transform:uppercase; letter-spacing:0.5px;}
+  .crow-value{font-size:13.5px; font-weight:500;}
+  @media (max-width:760px){ .connect{grid-template-columns:1fr; padding:28px;} }
+
+  footer{border-top:1px solid var(--line); padding:28px 0; text-align:center; font-family:var(--font-mono); font-size:11.5px; color:var(--muted-2);}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="dot"></span>Shiva Sai</div>
+    <div class="nav-tabs">
+      <a href="#about">Overview</a>
+      <a href="#skills">Skills</a>
+      <a href="#experience">Experience</a>
+      <a href="#achievements">Impact</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="status">● live_dashboard.pbix</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <section class="hero" style="border-top:none;">
+    <div class="eyebrow">DATA ANALYST · HYDERABAD, INDIA</div>
+    <h1>Turning raw rows<br>into <span class="accent">business decisions.</span></h1>
+    <p class="lede">2.7 years building KPI dashboards, optimizing SQL, and automating reports for operations teams — so stakeholders spend less time hunting for numbers and more time acting on them.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="mailto:madupathishivasai@gmail.com">Get in touch →</a>
+      <a class="btn btn-ghost" href="https://linkedin.com/in/shiva-sai-b16b11198/" target="_blank" rel="noopener">View LinkedIn</a>
+    </div>
+
+    <div class="dash">
+      <div class="dash-head">
+        <span>impact_summary.pbix</span>
+        <span class="lights"><span></span><span></span><span></span></span>
+      </div>
+      <div class="dash-grid">
+        <div class="kpi">
+          <div class="kpi-label">Experience</div>
+          <div class="kpi-value"><span class="counter" data-target="2.7" data-decimals="1">0</span><span class="unit">yrs</span></div>
+          <div class="kpi-bar"><div class="kpi-bar-fill" data-width="54%"></div></div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Reporting Effort ↓</div>
+          <div class="kpi-value"><span class="counter" data-target="40">0</span><span class="unit">%</span></div>
+          <div class="kpi-bar"><div class="kpi-bar-fill" data-width="40%"></div></div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Query Perf. ↑</div>
+          <div class="kpi-value"><span class="counter" data-target="35">0</span><span class="unit">%</span></div>
+          <div class="kpi-bar"><div class="kpi-bar-fill" data-width="35%"></div></div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Data Accuracy</div>
+          <div class="kpi-value"><span class="counter" data-target="99">0</span><span class="unit">%</span></div>
+          <div class="kpi-bar"><div class="kpi-bar-fill" data-width="99%"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="sec-head"><span class="sec-num">01</span><span class="sec-title">Overview</span></div>
+    <div class="about-grid">
+      <p class="about-text">
+        I'm a <strong>Data & Business Analyst</strong> currently working as an <strong>MIS Executive at NueGo</strong>, where I build the dashboards operations teams check every morning. My work sits at the intersection of <strong>SQL, Power BI, and Python</strong> — pulling messy data out of source systems, shaping it into something trustworthy, and presenting it in a way people actually act on.
+        <br><br>
+        Before that, I was a Data Analyst at <strong>Texas Mobile PCS</strong>, tracking sales and customer performance metrics for daily and weekly business reviews. Across both roles, the throughline has been the same: reduce manual effort, tighten data quality, and make reporting something teams can rely on rather than double-check.
+      </p>
+      <div class="facts">
+        <div class="fact"><span class="fact-k">Location</span><span class="fact-v">Hyderabad, Telangana</span></div>
+        <div class="fact"><span class="fact-k">Role</span><span class="fact-v">MIS Executive · Data Analytics</span></div>
+        <div class="fact"><span class="fact-k">Focus</span><span class="fact-v">SQL · Power BI · Python</span></div>
+        <div class="fact"><span class="fact-k">Education</span><span class="fact-v">B.Tech, CSE</span></div>
+        <div class="fact"><span class="fact-k">Phone</span><span class="fact-v">+91 63028 40497</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="sec-head"><span class="sec-num">02</span><span class="sec-title">Skills</span></div>
+    <p class="sec-sub">The stack I reach for to get from raw data to a dashboard someone trusts.</p>
+
+    <div class="query-box"><span class="kw">SELECT</span> category, tools <span class="kw">FROM</span> skillset <span class="kw">WHERE</span> proficiency = <span class="str">'applied'</span>;</div>
+    <table class="skills-table">
+      <thead><tr><th style="width:26%">Category</th><th>Tools & Techniques</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="cat-name">SQL</span></td>
+          <td><div class="tag-row"><span class="tag">Joins</span><span class="tag">CTEs</span><span class="tag">Window Functions</span><span class="tag">Subqueries</span><span class="tag">Stored Procedures</span><span class="tag">Views</span><span class="tag">Query Optimization</span></div></td>
+        </tr>
+        <tr>
+          <td><span class="cat-name">Business Intelligence</span></td>
+          <td><div class="tag-row"><span class="tag">Power BI</span><span class="tag">DAX</span><span class="tag">Power Query</span><span class="tag">Data Modeling</span></div></td>
+        </tr>
+        <tr>
+          <td><span class="cat-name">Analytics</span></td>
+          <td><div class="tag-row"><span class="tag">ETL / KPI Development</span><span class="tag">Dashboard Development</span><span class="tag">Data Visualization</span><span class="tag">Root Cause Analysis</span><span class="tag">Trend Analysis</span><span class="tag">Reporting Automation</span><span class="tag">Data Validation</span></div></td>
+        </tr>
+        <tr>
+          <td><span class="cat-name">Databases</span></td>
+          <td><div class="tag-row"><span class="tag">MySQL</span><span class="tag">Oracle SQL</span></div></td>
+        </tr>
+        <tr>
+          <td><span class="cat-name">Visualization</span></td>
+          <td><div class="tag-row"><span class="tag">Power BI Dashboards</span><span class="tag">Tableau</span></div></td>
+        </tr>
+        <tr>
+          <td><span class="cat-name">Programming</span></td>
+          <td><div class="tag-row"><span class="tag">Python</span><span class="tag">Pandas</span><span class="tag">Data Processing</span></div></td>
+        </tr>
+        <tr>
+          <td><span class="cat-name">Excel</span></td>
+          <td><div class="tag-row"><span class="tag">Pivot Tables</span><span class="tag">VLOOKUP</span><span class="tag">Data Cleaning</span><span class="tag">Data Analysis</span></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="sec-head"><span class="sec-num">03</span><span class="sec-title">Experience</span></div>
+    <div class="timeline">
+      <div class="tl-item current">
+        <div class="tl-date">NOV 2024 — PRESENT <span class="tl-tag">CURRENT</span></div>
+        <div class="tl-role">MIS Executive (Data Analytics)</div>
+        <div class="tl-org">NueGo · Hyderabad, Telangana</div>
+        <ul class="tl-list">
+          <li>Developed interactive Power BI dashboards to monitor business KPIs and operational performance across multiple functions.</li>
+          <li>Designed SQL queries to extract, transform, and analyze large datasets for accurate, timely reporting.</li>
+          <li>Built automated reporting solutions that cut manual reporting effort and improved turnaround.</li>
+          <li>Built DAX measures and calculated columns for advanced business reporting and KPI tracking.</li>
+          <li>Optimized SQL queries, improving dashboard refresh performance and report execution time.</li>
+          <li>Maintained data quality through validation checks to keep reporting reliable for decision-making.</li>
+        </ul>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">DEC 2023 — NOV 2024</div>
+        <div class="tl-role">Data Analyst</div>
+        <div class="tl-org">Texas Mobile PCS · Hyderabad, Telangana</div>
+        <ul class="tl-list">
+          <li>Developed Power BI dashboards to track sales, operational, and customer performance metrics.</li>
+          <li>Extracted, transformed, and processed raw data using SQL for reporting.</li>
+          <li>Built automated KPI reports supporting daily and weekly business reviews.</li>
+          <li>Partnered with cross-functional teams to translate reporting requirements into business solutions.</li>
+          <li>Ensured reporting accuracy through comprehensive data validation and quality checks.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACHIEVEMENTS -->
+  <section id="achievements">
+    <div class="sec-head"><span class="sec-num">04</span><span class="sec-title">Impact</span></div>
+    <div class="ach-grid">
+      <div class="ach-card">
+        <div class="ach-num">40% ↓</div>
+        <div class="ach-desc">Automated Power BI reporting processes, cutting manual reporting effort nearly in half.</div>
+      </div>
+      <div class="ach-card">
+        <div class="ach-num">35% ↑</div>
+        <div class="ach-desc">Optimized SQL queries to significantly improve report execution performance.</div>
+      </div>
+      <div class="ach-card">
+        <div class="ach-num">99%</div>
+        <div class="ach-desc">Maintained data accuracy through robust validation and quality-check processes.</div>
+      </div>
+      <div class="ach-card">
+        <div class="ach-num">Cross-Team</div>
+        <div class="ach-desc">Delivered analytical insights that supported real business process improvements and operational efficiency.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education">
+    <div class="sec-head"><span class="sec-num">05</span><span class="sec-title">Education</span></div>
+    <div class="edu-card">
+      <div>
+        <div class="edu-degree">B.Tech in Computer Science & Engineering</div>
+        <div class="edu-school">CMR College of Engineering & Technology, Hyderabad, Telangana</div>
+      </div>
+      <div class="edu-year">2019 — 2023</div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="sec-head"><span class="sec-num">06</span><span class="sec-title">Contact</span></div>
+    <div class="connect">
+      <div>
+        <div class="connect-title">Let's talk data.</div>
+        <p class="connect-sub">Open to Data Analyst, Business Analyst, and BI roles where dashboards actually get used.</p>
+        <div class="conn-string"><span class="k">connection</span> = {
+  <span class="k">status</span>: "open_to_opportunities",
+  <span class="k">response_time</span>: "&lt; 24h"
+}</div>
+        <a class="btn btn-primary" href="mailto:madupathishivasai@gmail.com">Send an email →</a>
+      </div>
+      <div class="contact-rows">
+        <a class="crow" href="mailto:madupathishivasai@gmail.com">
+          <span class="crow-label">Email</span><span class="crow-value">madupathishivasai@gmail.com</span>
+        </a>
+        <a class="crow" href="tel:+916302840497">
+          <span class="crow-label">Phone</span><span class="crow-value">+91 63028 40497</span>
+        </a>
+        <a class="crow" href="https://linkedin.com/in/shiva-sai-b16b11198/" target="_blank" rel="noopener">
+          <span class="crow-label">LinkedIn</span><span class="crow-value">/in/shiva-sai-b16b11198</span>
+        </a>
+        <div class="crow">
+          <span class="crow-label">Location</span><span class="crow-value">Hyderabad, Telangana</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>© 2026 Shiva Sai — built with SQL, coffee, and a healthy suspicion of unvalidated data.</footer>
+
+<script>
+  const counters = document.querySelectorAll('.counter');
+  const bars = document.querySelectorAll('.kpi-bar-fill');
+  let animated = false;
+
+  function animateCounters(){
+    if(animated) return;
+    animated = true;
+    counters.forEach(el => {
+      const target = parseFloat(el.getAttribute('data-target'));
+      const decimals = parseInt(el.getAttribute('data-decimals') || '0');
+      const duration = 1200;
+      const start = performance.now();
+      function tick(now){
+        const p = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        const val = target * eased;
+        el.textContent = decimals ? val.toFixed(decimals) : Math.round(val);
+        if(p < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+    bars.forEach(b => { b.style.width = b.getAttribute('data-width'); });
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting) animateCounters();
+    });
+  }, { threshold: 0.4 });
+  observer.observe(document.querySelector('.dash'));
+</script>
+
+</body>
+</html>
